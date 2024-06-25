@@ -3,8 +3,8 @@
 .PHONY: help install run clean test
 
 help:
-	@echo "Makefile for Brussels' Hotspots app"
-	@echo "Usage:"
+	@echo "  Makefile for Brussels' Hotspots app"
+	@echo "  Usage:"
 	@echo "  make install   - Install the project dependencies"
 	@echo "  make run       - Run the application"
 	@echo "  make clean     - Clean the project"
