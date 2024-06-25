@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name='your_project_name',
     version='0.1',
-    packages=find_packages(where='src'),  # Adjust if your packages are in a different directory
-    package_dir={'': 'src'},  # Adjust if your packages are in a different directory
+    packages=find_packages(where='src'),
+    package_dir={'': 'src'},
     include_package_data=True,
     install_requires=[
         'altair==5.3.0',
@@ -98,7 +98,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'your_command=app:main',  # Update with your entry point if you have one
+            'run-app=run_app:main',  # This creates a command 'run-app' that runs the 'main' function from 'run_app.py'
         ],
     },
     author='Your Name',
