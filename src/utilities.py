@@ -8,7 +8,6 @@ and visualization used across different parts of the project.
 #Loading Packages
 import pandas as pd
 import numpy as np
-import gdown
 from geopy.geocoders import Nominatim
 from sklearn.cluster import DBSCAN
 import os
