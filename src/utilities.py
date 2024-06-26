@@ -1,8 +1,8 @@
 """
 Utility functions for the project.
 
-This module contains reusable functions data processing,
-and visualization used across different parts of the project.
+This module contains the functions mainly used for coordinate and distance computations,
+as well as the ones used for visualization at the app development within the project.
 """
 
 #Loading Packages
