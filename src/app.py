@@ -14,31 +14,11 @@ from utilities import add_marker, add_circle_marker
 #Using 18 logical cores
 os.environ['LOKY_MAX_CPU_COUNT'] = '18'
 
-#Loading Data (drive)
-#links = [
-#    "https://drive.google.com/file/d/1iZ6Cpzh4iniSv5D6firXnaWXAI5DCw3A/edit?usp=drive_link",
-#    "https://drive.google.com/file/d/19i47foVILPjmA4RyKP4WEBQFXSEvLyEe/edit?usp=drive_link",
-#    "https://drive.google.com/file/d/12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw/edit?usp=drive_link"
-#]
-
-#Downloading data
-#file_ids = [link.split('/d/')[1].split('/')[0] for link in links]
-#urls = [f'https://drive.google.com/uc?id={file_id}' for file_id in file_ids]
-#gdown.download(urls[0], 'hotspots_distance.xlsx', quiet=False)
-#gdown.download(urls[1], 'greenspots.xlsx', quiet=False)
-#gdown.download(urls[2], 'bluespots.xlsx', quiet=False)
-#hotspots = pd.read_excel(f'hotspots_distance.xlsx', dtype={'Postal Code': 'str','AED_distance': 'int','Ambulance_distance': 'int'})
-#greenspots = pd.read_excel(f'greenspots.xlsx', dtype={'Cluster': 'int','id':'str'})
-#bluespots = pd.read_excel(f'bluespots.xlsx', dtype={'Cluster': 'int','id':'str'})
-
 #Loading AED data (locally)
 dir = os.getcwd()
-hotspotsFpath = os.path.join(dir,'hotspots_distance.xlsx')
-greenspotspath = os.path.join(dir,'greenspots.xlsx')
-bluespotspath = os.path.join(dir,'bluespots.xlsx')
-hotspots = pd.read_excel(hotspotsFpath, dtype={'Postal Code': 'str','AED_distance': 'int','Ambulance_distance': 'int'})
-greenspots = pd.read_excel(greenspotspath, dtype={'Cluster': 'int','id':'str'})
-bluespots = pd.read_excel(bluespotspath, dtype={'Cluster': 'int','id':'str'})
+hotspots = pd.read_excel(os.path.join(dir,'hotspots_distance.xlsx'), dtype={'Postal Code': 'str','AED_distance': 'int','Ambulance_distance': 'int'})
+greenspots = pd.read_excel(os.path.join(dir,'greenspots.xlsx'), dtype={'Cluster': 'int','id':'str'})
+bluespots = pd.read_excel(os.path.join(dir,'bluespots.xlsx'), dtype={'Cluster': 'int','id':'str'})
 
 #Area of Brussels region
 brussels_coordinates = [50.8503, 4.3517]
@@ -83,10 +63,7 @@ for _, row in interv_subset.iterrows():
 
 # Loading the map
 dir = os.getcwd()
-mappath = os.path.join(dir,'map_belgium.html')
-map_belgium.save(mappath)
-map_html = open(mappath, 'r').read()
+map_belgium.save(os.path.join(dir,'map_belgium.html'))
+map_html = open(os.path.join(dir,'map_belgium.html'), 'r').read()
 st.title('AED Coverage and Cardiac Arrest Hotspots in Brussels')
 st.components.v1.html(map_html, height=700)
-
-#Run in terminal by "python -m streamlit run App.py"
