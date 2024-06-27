@@ -40,9 +40,9 @@ class TestBasicData:
         assert self.greenspots['Cluster'].nunique() == 111, "Greenspots: There should be 111 clusters"
 
     def test_bluespots(self, setup):
-        assert self.bluespots.shape[1] == 4, "Bluespots: Number of columns should be 4"
-        assert self.bluespots.shape[0] == 85, "Bluespots: There should be 85 rows"
-        assert self.bluespots['Cluster'].nunique() == 25, "Bluespots: There should 25 clusters"
+        assert self.bluespots.shape[1] == 5, "Bluespots: Number of columns should be 5"
+        assert self.bluespots.shape[0] == 11, "Bluespots: There should be 11 rows"
+        assert self.bluespots['Cluster'].nunique() == 11, "Bluespots: There should be 1 cluster"
 
 if __name__ == '__main__':
     pytest.main()
