@@ -25,6 +25,15 @@ interventions = pd.read_excel(f'interventions.xlsx')
 ambulances = pd.read_excel(f'ambulances.xlsx')
 aed = pd.read_excel(f'aed.xlsx')
 
+#Loading AED data (locally)
+#dir = os.getcwd()
+#interventionpath = os.path.join(dir,'interventions.xlsx')
+#ambulancespath = os.path.join(dir,'ambulances.xlsx')
+#aedpath = os.path.join(dir,'aed.xlsx')
+#interventions = pd.read_excel(interventionpath)
+#ambulances = pd.read_excel(ambulancespath)
+#aed = pd.read_excel(aedpath)
+
 #DBSCAN clustering with Haversine distance metric for interventions
 intervention_rad = np.radians(interventions[['Longitude','Latitude']])
 Clustering_interv = DBSCAN(eps=0.000008 , min_samples=5, metric='haversine').fit(intervention_rad) #50 metres area
@@ -62,10 +71,13 @@ print('\nObservation per cluster:\n',bluespots['Cluster'].value_counts())
 print('\nTotal number of clusters:\n',len(bluespots['Cluster'].value_counts()))
 
 #Exporting to excel
-outpath='C:/Users/oriol/OneDrive/UNI/MASTER/Modern Data Analytics/Project/data/' #New path needs to be specified
-hotspots.to_excel(f'{outpath}hotspots.xlsx', index=False)
-greenspots.to_excel(f'{outpath}greenspots.xlsx', index=False)
-bluespots.to_excel(f'{outpath}bluespots.xlsx', index=False)
+dir = os.getcwd()
+hotspotspath = os.path.join(dir,'hotspots.xlsx')
+greenspotspath = os.path.join(dir,'greenspots.xlsx')
+bluespotspath = os.path.join(dir,'bluespots.xlsx')
+interventions.to_excel(hotspotspath, index=False)
+aed.to_excel(greenspotspath, index=False)
+ambulances.to_excel(bluespotspath, index=False)
 
 
 
