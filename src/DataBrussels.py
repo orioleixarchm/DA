@@ -13,21 +13,21 @@ links = [
 ]
 
 #Downloading data
+dir = os.getcwd()
 file_ids = [link.split('/d/')[1].split('/')[0] for link in links]
 urls = [f'https://drive.google.com/uc?id={file_id}' for file_id in file_ids]
-gdown.download(urls[0], 'intervb1.parquet.gzip', quiet=False)
-gdown.download(urls[1], 'intervb2.parquet.gzip', quiet=False)
-gdown.download(urls[2], 'ambulances.parquet.gzip', quiet=False)
-gdown.download(urls[3], 'aed.xlsx', quiet=False)
-intervb1 = pd.read_parquet(f'intervb1.parquet.gzip')
-intervb2 = pd.read_parquet(f'intervb2.parquet.gzip')
-ambulances = pd.read_parquet(f'ambulances.parquet.gzip')
-aed = pd.read_excel(f'aed.xlsx', dtype={'id':'str'})
+gdown.download(urls[0], os.path.join(dir,'intervb1.parquet.gzip'), quiet=False)
+gdown.download(urls[1], os.path.join(dir,'intervb2.parquet.gzip'), quiet=False)
+gdown.download(urls[2], os.path.join(dir,'ambulances.parquet.gzip'), quiet=False)
+gdown.download(urls[3], os.path.join(dir,'aed.xlsx'), quiet=False)
+intervb1 = pd.read_parquet(os.path.join(dir,'intervb1.parquet.gzip'))
+intervb2 = pd.read_parquet(os.path.join(dir,'intervb2.parquet.gzip'))
+ambulances = pd.read_parquet(os.path.join(dir,'ambulances.parquet.gzip'))
+aed = pd.read_excel(os.path.join(dir,'aed.xlsx'), dtype={'id':'str'})
 
 #Loading AED data (locally)
 #dir = os.getcwd()
-#aedpath = os.path.join(dir,'aed_coord.xlsx')
-#aed = pd.read_excel(aedpath, dtype={'id':'str'})
+#aed = pd.read_excel(os.path.join(dir,'aed_coord.xlsx'), dtype={'id':'str'})
 
 #Interventions cleaning
 intervb1['Event Code'] = intervb1['eventtype_firstcall'].str.split().str[0]
@@ -67,9 +67,6 @@ print(ambulances.tail())
 
 #Exporting to excel
 dir = os.getcwd()
-interventionpath = os.path.join(dir,'interventions.xlsx')
-aedpath = os.path.join(dir,'aed.xlsx')
-ambulancespath = os.path.join(dir,'ambulances.xlsx')
-interventions.to_excel(interventionpath, index=False)
-aed.to_excel(aedpath, index=False)
-ambulances.to_excel(ambulancespath, index=False)
+interventions.to_excel(os.path.join(dir,'interventions.xlsx'), index=False)
+aed.to_excel(os.path.join(dir,'aed.xlsx'), index=False)
+ambulances.to_excel(os.path.join(dir,'ambulances.xlsx'), index=False)
