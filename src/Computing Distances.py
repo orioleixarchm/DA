@@ -27,6 +27,15 @@ hotspots = pd.read_excel(f'hotspots.xlsx')
 greenspots = pd.read_excel(f'greenspots.xlsx')
 bluespots = pd.read_excel(f'bluespots.xlsx')
 
+#Loading AED data (locally)
+#dir = os.getcwd()
+#hotspotspath = os.path.join(dir,'hotspots.xlsx')
+#greenspotspath = os.path.join(dir,'greenspots.xlsx')
+#bluespotspath = os.path.join(dir,'bluespots.xlsx')
+#hotspots = pd.read_excel(hotspotspath)
+#greenspots = pd.read_excel(greenspotspath)
+#bluespots = pd.read_excel(bluespotspath)
+
 #Creating K-d treea
 aed_matrix = greenspots[['Latitude', 'Longitude']].values
 ambulances_matrix = bluespots[['Latitude', 'Longitude']].values
@@ -47,5 +56,6 @@ print(hotspots.tail())
 print(hotspots.shape)
 
 #Exporting to excel
-outpath='C:/Users/oriol/OneDrive/UNI/MASTER/Modern Data Analytics/Project/data/' #New path needs to be specified
-hotspots.to_excel(f'{outpath}hotspots_distance.xlsx', index=False)
+dir = os.getcwd()
+hotspotsFpath = os.path.join(dir,'hotspots_distance.xlsx')
+hotspots.to_excel(hotspotsFpath, index=False)
