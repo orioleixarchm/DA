@@ -61,7 +61,8 @@ print(aed.head())
 print(aed.tail())
 
 #Ambulance cleaning
-ambulances = ambulances[['latitude','longitude','departure_location_number']].rename(columns={'latitude':'Latitude','longitude':'Longitude','departure_location_number':'id'}).dropna()
+ambulances = ambulances[['latitude','longitude','departure_location_number','region']].rename(columns={'latitude':'Latitude','longitude':'Longitude','departure_location_number':'id'}).dropna()
+ambulances = ambulances[ambulances['region']=='Brussels Hoofdstedelijk Gewest']
 print(ambulances.head())
 print(ambulances.tail())
 
