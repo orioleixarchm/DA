@@ -12,10 +12,11 @@ links = [
 ]
 
 #Downloading data
+dir = os.getcwd()
 file_ids = [link.split('/d/')[1].split('/')[0] for link in links]
 urls = [f'https://drive.google.com/uc?id={file_id}' for file_id in file_ids]
-gdown.download(urls[0], 'aed_locations.parquet.gzip', quiet=False)
-aed = pd.read_parquet(f'aed_locations.parquet.gzip')
+gdown.download(urls[0], os.path.join(dir,'aed_locations.parquet.gzip'), quiet=False)
+aed = pd.read_parquet(os.path.join(dir,'aed_locations.parquet.gzip'))
 
 #AEDs Cleaning
 aed = aed.dropna(subset=['address','number','postal_code'])
