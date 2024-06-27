@@ -58,4 +58,8 @@ print(hotspots.shape)
 #Exporting to excel
 dir = os.getcwd()
 hotspotsFpath = os.path.join(dir,'hotspots_distance.xlsx')
+greenspotspath = os.path.join(dir,'greenspots.xlsx')
+bluespotspath = os.path.join(dir,'bluespots.xlsx')
 hotspots.to_excel(hotspotsFpath, index=False)
+greenspots.to_excel(greenspotspath, index=False)
+bluespots.to_excel(bluespotspath, index=False)
