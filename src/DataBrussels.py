@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import gdown
+import os
 
 #Loading Data
 links = [
@@ -22,6 +23,11 @@ intervb1 = pd.read_parquet(f'intervb1.parquet.gzip')
 intervb2 = pd.read_parquet(f'intervb2.parquet.gzip')
 ambulances = pd.read_parquet(f'ambulances.parquet.gzip')
 aed = pd.read_excel(f'aed.xlsx', dtype={'id':'str'})
+
+#Loading AED data (locally)
+#dir = os.getcwd()
+#aedpath = os.path.join(dir,'aed_coord.xlsx')
+#aed = pd.read_excel(aedpath, dtype={'id':'str'})
 
 #Interventions cleaning
 intervb1['Event Code'] = intervb1['eventtype_firstcall'].str.split().str[0]
@@ -60,7 +66,10 @@ print(ambulances.head())
 print(ambulances.tail())
 
 #Exporting to excel
-outpath='C:/Users/oriol/OneDrive/UNI/MASTER/Modern Data Analytics/Project/data/' #New path needs to be specified
-interventions.to_excel(f'{outpath}interventions.xlsx', index=False)
-aed.to_excel(f'{outpath}aed.xlsx', index=False)
-ambulances.to_excel(f'{outpath}ambulances.xlsx', index=False)
+dir = os.getcwd()
+interventionpath = os.path.join(dir,'interventions.xlsx')
+aedpath = os.path.join(dir,'aed.xlsx')
+ambulancespath = os.path.join(dir,'ambulances.xlsx')
+interventions.to_excel(interventionpath, index=False)
+aed.to_excel(aedpath, index=False)
+ambulances.to_excel(ambulancespath, index=False)
