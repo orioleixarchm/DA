@@ -37,12 +37,12 @@ class TestBasicData:
     def test_greenspots(self, setup):
         assert self.greenspots.shape[1] == 8, "Greenspots: Number of columns should be 5"
         assert self.greenspots.shape[0] == 2654, "Bluespots: There should be 2654 rows"
-        assert self.greenspots['Cluster'].unique() == 111, "Greenspots: There should be 111 clusters"
+        assert self.greenspots['Cluster'].nunique() == 111, "Greenspots: There should be 111 clusters"
 
     def test_bluespots(self, setup):
         assert self.bluespots.shape[1] == 4, "Bluespots: Number of columns should be 4"
         assert self.bluespots.shape[0] == 85, "Bluespots: There should be 85 rows"
-        assert self.bluespots['Cluster'].unique() == 25, "Bluespots: There should 25 clusters"
+        assert self.bluespots['Cluster'].nunique() == 25, "Bluespots: There should 25 clusters"
 
 if __name__ == '__main__':
     pytest.main()
