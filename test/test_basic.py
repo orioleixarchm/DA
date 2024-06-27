@@ -30,7 +30,7 @@ class TestBasicData:
         self.bluespots = pd.read_excel(os.path.join(data_dir, 'bluespots.xlsx'))
 
     def test_hotspots(self, setup):
-        assert self.hotspots.shape[1] == 8, "Hotspots: Number of columns should be 9"
+        assert self.hotspots.shape[1] == 9, "Hotspots: Number of columns should be 9"
         assert self.hotspots.shape[0] == 126222, "Hotspots: There should be 126222 rows"
         assert self.hotspots['Cluster'].nunique() == 3557, "Hotspots: There should be 3557 clusters"
 
