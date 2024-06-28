@@ -14,6 +14,7 @@ All programs can retreive data in two ways:
   - The following running order must be ensured: _Computing Distances.py -> app.py_.
 - **Locally**: All programs (except _AEDs Coordinates.py_) can retrieve the necessary data from the local directory once created by the previous program. Portions of the code need to be uncomented.
   - The following running order must be ensured: _AEDs Coordinates.py -> DataBrussels.py -> Clustering.py -> Computing Distances.py -> app.py_.
+
 Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take up to 4 hours, therefore I encourage the user to either follow running option 1 or, at least use the drive to get until the second step of the dataflow and run locally only the following part _DataBrussels.py -> Clustering.py -> Computing Distances.py -> app.py_ skipping the first porogram as the data created therein is stored in the drive.
 
 ### Parts and Programs
