@@ -1,5 +1,6 @@
 # Medical Intervention Hotspots in Brussels
-Data Analytics App project 
+Modern Data Analytics App project.
+Oriol Eixarch Mejías.
 
 ## Objective
 The objective of this project is to analyze the current locations of  the occurrences of cardiac related issues in Brussels, the location of Automated External Defibrillators (AEDs) and that of the emergency services. The application aims to provide insights into the accessibility and coverage of AEDs and emergency services to improve emergency response and potentially save live.
