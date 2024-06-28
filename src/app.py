@@ -22,6 +22,7 @@ os.environ['LOKY_MAX_CPU_COUNT'] = '18'
 # ]
 
 # #Downloading data
+# dir = os.getcwd()
 # file_ids = [link.split('/d/')[1].split('/')[0] for link in links]
 # urls = [f'https://drive.google.com/uc?id={file_id}' for file_id in file_ids]
 # gdown.download(urls[0], os.path.join(dir,'hotspots_distance.xlsx'), quiet=False)
