@@ -1,5 +1,6 @@
 # Medical Intervention Hotspots in Brussels
 Modern Data Analytics App project.
+
 Oriol Eixarch Mejías.
 
 ## Objective
