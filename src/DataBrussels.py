@@ -43,7 +43,7 @@ intervb2 = intervb2[['Event Code','Latitude intervention','Longitude interventio
                                                                                                            'Longitude intervention':'longitude',
                                                                                                            'Abandon reason FR':'Abandon_Reason'})
 interventions = pd.concat([intervb1,intervb2], ignore_index=True).reset_index(drop=True)
-interventions = interventions.loc[(~interventions['Abandon_Reason'].isin(['Error','Erreur']) | interventions['Event Code'].isin(['P039','P011','P003','P000'])),:]
+interventions = interventions.loc[(~interventions['Abandon_Reason'].isin(['Error','Erreur'])) & (interventions['Event Code'].isin(['P039','P011','P003','P000'])),:]
 interventions = interventions.dropna(subset=['longitude','latitude','Postal Code'])
 interventions[['longitude','latitude']] = interventions[['longitude','latitude']].astype(int).astype(str)
 interventions['Latitude'] = interventions['latitude'].apply(lambda x: x[:2] + '.' + x[2:])
@@ -51,6 +51,8 @@ interventions['Longitude'] = interventions['longitude'].apply(lambda x: x[:1] + 
 interventions['Dead'] = np.where(interventions['Abandon_Reason'].isin(['DCD','Overleden']),'Yes','No')
 interventions['Postal Code'] = interventions['Postal Code'].astype(int).astype(str)
 interventions.drop(columns=['longitude','latitude'],inplace=True)
+interventions.drop_duplicates(subset=['Event Code','Postal Code','Latitude','Longitude','Dead'], inplace=True)
+interventions.dropna(subset=['Latitude','Longitude'])
 print(interventions.head())
 print(interventions.tail())
 
