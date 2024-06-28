@@ -64,7 +64,7 @@ ambulances_rad = np.radians(ambulances[['Longitude','Latitude']])
 Clustering_ambulances = DBSCAN(eps=0.0008 , min_samples=2, metric='haversine').fit(ambulances_rad) #5000 metres area
 labels = Clustering_ambulances.labels_ #Numbering clusters
 ambulances['Cluster'] = labels 
-bluespots = ambulances[ambulances['Cluster'] != -1] #Removing noise (label = -1)
+bluespots = ambulances
 
 #Display the Bluespots
 print('Bluespots data frame:\n',bluespots.head())
