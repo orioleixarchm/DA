@@ -2,7 +2,12 @@
 Data Analytics App project 
 
 ## Objective
-The objective of this project is to analyze the current locations of Automated External Defibrillators (AEDs) in relation to the locations of emergency services and the occurrences of cardiac arrests in Brussels, Belgium. The application aims to provide insights into the accessibility and coverage of AEDs and emergency services to improve emergency response and potentially save lives.
+The objective of this project is to analyze the current locations of  the occurrences of cardiac related issues in Brussels, the location of Automated External Defibrillators (AEDs) and that of the emergency services. The application aims to provide insights into the accessibility and coverage of AEDs and emergency services to improve emergency response and potentially save live.
+The following kinds of intervention have been used:
+- P011 - Chest pain.
+- P039 - Cardiac problem (other than thoracic pain).
+- P000 - ARCA DEA (stands for Ambulance Réanimation-Catastrophe + Défibrillateur Externe Automatique).
+- P003  N05 - HARTSTILSTAND - DOOD - OVERLEDEN. 
 
 ## Project Structure
 The project consists of several Python scripts and a Streamlit application.
