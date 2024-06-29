@@ -31,18 +31,18 @@ class TestBasicData:
 
     def test_hotspots(self, setup):
         assert self.hotspots.shape[1] == 9, "Hotspots: Number of columns should be 9"
-        assert self.hotspots.shape[0] == 126222, "Hotspots: There should be 126222 rows"
-        assert self.hotspots['Cluster'].nunique() == 3557, "Hotspots: There should be 3557 clusters"
+        assert self.hotspots.shape[0] == 5340, "Hotspots: There should be 5340 rows"
+        assert self.hotspots['Cluster'].nunique() == 30, "Hotspots: There should be 30 clusters"
 
     def test_greenspots(self, setup):
-        assert self.greenspots.shape[1] == 8, "Greenspots: Number of columns should be 5"
+        assert self.greenspots.shape[1] == 5, "Greenspots: Number of columns should be 5"
         assert self.greenspots.shape[0] == 2654, "Bluespots: There should be 2654 rows"
         assert self.greenspots['Cluster'].nunique() == 111, "Greenspots: There should be 111 clusters"
 
     def test_bluespots(self, setup):
         assert self.bluespots.shape[1] == 5, "Bluespots: Number of columns should be 5"
-        assert self.bluespots.shape[0] == 11, "Bluespots: There should be 11 rows"
-        assert self.bluespots['Cluster'].nunique() == 11, "Bluespots: There should be 1 cluster"
+        assert self.bluespots.shape[0] == 13, "Bluespots: There should be 13 rows"
+        assert self.bluespots['Cluster'].nunique() == 2, "Bluespots: There should be 2 clusters"
 
 if __name__ == '__main__':
     pytest.main()
