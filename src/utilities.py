@@ -7,17 +7,8 @@ as well as the ones used for visualization at the app development within the pro
 
 #Loading Packages
 import pandas as pd
-import numpy as np
-from geopy.geocoders import Nominatim
-from sklearn.cluster import DBSCAN
-import os
-from scipy.spatial import KDTree
 from geopy.distance import geodesic
-import streamlit as st
 import folium
-import matplotlib.cm as cm
-import matplotlib.colors as colors
-import matplotlib.pyplot as plt
 
 #Returns the coordinates for a given full address.
 def geocode_address(row):
