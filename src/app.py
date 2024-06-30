@@ -47,8 +47,7 @@ intervention_type = st.selectbox('Intervention outcome degree of severity', ('Fa
 if intervention_type == 'Critical location':
     aed_distance = st.number_input('Set critical distance to AED (meters)', min_value=0, value=500)
     ambulance_distance = st.number_input('Set critical distance to Ambulance (meters)', min_value=0, value=3000)
-    hotspots['Critical location'] = np.where((hotspots['AED_distance'] > aed_distance) & (hotspots['Ambulance_distance'] > ambulance_distance), 'Yes', 'No')
-    interv_subset = hotspots[hotspots['Critical location'] == 'Yes']
+    interv_subset = hotspots.loc[(hotspots['AED_distance'] > aed_distance) & (hotspots['Ambulance_distance'] > ambulance_distance),:]
 elif intervention_type == 'Fatal':
     interv_subset = hotspots[hotspots['Dead'] == 'Yes']
 elif intervention_type == 'Non-Fatal':
