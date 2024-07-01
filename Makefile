@@ -40,9 +40,12 @@ run:
 
 clean:
 	@echo "Cleaning project..."
-	find . -type f -name '*.pyc' -delete
-	find . -type d -name '__pycache__' -delete
-	rm -rf build dist *.egg-info
+	del /s /q *.pyc
+	rmdir /s /q __pycache__
+	rmdir /s /q build
+	rmdir /s /q dist
+	del /s /q *.egg-info
+	@echo "Cleanup complete."
 
 test:
 	@echo "Running tests..."
