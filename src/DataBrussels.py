@@ -52,7 +52,7 @@ intervb2 = intervb2[['Event Code','Latitude intervention','Longitude interventio
                                                                                                            'Longitude intervention':'longitude',
                                                                                                            'Abandon reason FR':'Abandon_Reason'})
 interventions = pd.concat([intervb1,intervb2], ignore_index=True).reset_index(drop=True)
-time_arrival = interventions[['TravelTime_Destination_minutes','Postal Code']].groupby('Postal Code').mean().reset_index()
+arrival_time = interventions[['TravelTime_Destination_minutes','Postal Code']].groupby('Postal Code').mean().reset_index()
 interventions = interventions.loc[(~interventions['Abandon_Reason'].isin(['Error','Erreur'])) & (interventions['Event Code'].isin(['P039','P011','P003','P000'])),:]
 interventions = interventions.dropna(subset=['longitude','latitude','Postal Code'])
 interventions[['longitude','latitude']] = interventions[['longitude','latitude']].astype(int).astype(str)
@@ -66,10 +66,10 @@ interventions.dropna(subset=['Latitude','Longitude'])
 print(interventions.head())
 print(interventions.tail())
 
-time_arrival = time_arrival.loc[time_arrival['Postal Code'].isin(interventions['Postal Code'].unique()),:].fillna(time_arrival['TravelTime_Destination_minutes'].mean())
-time_arrival = time_arrival._append({'Postal Code':'All','TravelTime_Destination_minutes':time_arrival['TravelTime_Destination_minutes'].mean()},ignore_index=True)
-print(time_arrival.head())
-print(time_arrival.tail())
+arrival_time = arrival_time.loc[arrival_time['Postal Code'].isin(interventions['Postal Code'].unique()),:].fillna(arrival_time['TravelTime_Destination_minutes'].mean())
+arrival_time = arrival_time._append({'Postal Code':'All','TravelTime_Destination_minutes':arrival_time['TravelTime_Destination_minutes'].mean()},ignore_index=True)
+print(arrival_time.head())
+print(arrival_time.tail())
 
 #AEDs Cleaning
 aed = aed[['Latitude','Longitude','Region','id']].dropna()
@@ -88,4 +88,4 @@ dir = os.getcwd()
 interventions.to_excel(os.path.join(dir,'interventions.xlsx'), index=False)
 aed.to_excel(os.path.join(dir,'aed.xlsx'), index=False)
 ambulances.to_excel(os.path.join(dir,'ambulances.xlsx'), index=False)
-time_arrival.to_excel(os.path.join(dir,'arrival_time.xlsx'), index=False)
+arrival_time.to_excel(os.path.join(dir,'arrival_time.xlsx'), index=False)
