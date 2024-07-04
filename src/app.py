@@ -17,8 +17,7 @@ os.environ['LOKY_MAX_CPU_COUNT'] = '18'
 # links = [
 #     "https://drive.google.com/file/d/1x4Ph_EfAo1994I4JVrGwPDmi0y-Vtt0q/edit?usp=drive_link",
 #     "https://drive.google.com/file/d/19i47foVILPjmA4RyKP4WEBQFXSEvLyEe/edit?usp=drive_link",
-#     "https://drive.google.com/file/d/12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw/edit?usp=drive_link",
-#     "https://drive.google.com/file/d/1izRBstasxVBKQY1dNJdaaqEvNwbFSREk/edit?usp=drive_link"
+#     "https://drive.google.com/file/d/12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw/edit?usp=drive_link"
 # ]
 
 # # #Downloading data
@@ -32,14 +31,12 @@ os.environ['LOKY_MAX_CPU_COUNT'] = '18'
 # hotspots = pd.read_excel(os.path.join(dir,'hotspots_distance.xlsx'), dtype={'Postal Code': 'str','AED_distance': 'int','Ambulance_distance': 'int'})
 # greenspots = pd.read_excel(os.path.join(dir,'greenspots.xlsx'), dtype={'Cluster': 'int','id':'str'})
 # bluespots = pd.read_excel(os.path.join(dir,'bluespots.xlsx'), dtype={'Cluster': 'int','id':'str'})
-# arrival_time = pd.read_excel(os.path.join(dir,'arrival_time.xlsx'))
 
 #Loading AED data (locally)
 dir = os.getcwd()
 hotspots = pd.read_excel(os.path.join(dir,'hotspots_distance.xlsx'), dtype={'Postal Code': 'str','AED_distance': 'int','Ambulance_distance': 'int'})
 greenspots = pd.read_excel(os.path.join(dir,'greenspots.xlsx'), dtype={'Cluster': 'int','id':'str'})
 bluespots = pd.read_excel(os.path.join(dir,'bluespots.xlsx'), dtype={'Cluster': 'int','id':'str'})
-arrival_time = pd.read_excel(os.path.join(dir,'arrival_time.xlsx'),dtype={'Postal Code': 'str'})
 
 #Area of Brussels region
 brussels_coordinates = [50.8503, 4.3517]
@@ -70,6 +67,10 @@ postal_codes_options = ['All'] + sorted(interv_subset['Postal Code'].unique().as
 postal_code = st.selectbox('Focus on a particular postal code?', (postal_codes_options))
 if postal_code != 'All':
     interv_subset = interv_subset[interv_subset['Postal Code'] == postal_code]
+    travel_time = interv_subset[interv_subset['Postal Code']==postal_code]['TravelTime_Destination_minutes'].iloc[0]
+else:
+    interv_subset = interv_subset
+    travel_time = interv_subset['TravelTime_Destination_minutes'].mean()
 
 event_codes_options = ['All'] + sorted(interv_subset['Event Code'].unique().astype(str))
 event_code = st.selectbox('Event code:', (event_codes_options))
@@ -82,7 +83,7 @@ with col1:
     centered_metric("Total number of fatalities:", interv_subset[interv_subset['Dead'] == 'Yes'].shape[0])
 with col2:
     centered_metric("Percentage of fataliteies:", f'{round((interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]/interv_subset.shape[0])*100,2)}%')
-    centered_metric("Average arrival time:", f'{round(arrival_time[arrival_time['Postal Code']==postal_code]['TravelTime_Destination_minutes'].iloc[0],2)} minutes')
+    centered_metric("Average arrival time:", f'{round(travel_time,2)} minutes')
 
 interv_subset['Cluster'] = pd.factorize(interv_subset['Cluster'])[0]
 
