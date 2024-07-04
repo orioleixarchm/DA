@@ -50,3 +50,14 @@ def add_circle_marker(row, map_obj, color):
         fill_color=color,
         popup=f"Hotspot: {row['Event Code']}<br>AED Distance: {row['AED_distance']} meters<br>Ambulance Distance: {row['Ambulance_distance']} meters<br>Fatal: {row['Dead']}"
     ).add_to(map_obj)
+
+def centered_metric(label, value):
+    st.markdown(
+        f"""
+        <div style='text-align: center;'>
+            <h4 style='margin: 0;'>{label}</h4>
+            <p style='font-size: 24px; margin: 0;'>{value}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
