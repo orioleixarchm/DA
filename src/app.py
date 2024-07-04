@@ -8,39 +8,50 @@ import streamlit as st
 import folium
 import os
 import gdown
-from joblib import Parallel, delayed
-from utilities import add_marker, add_circle_marker
+from utilities import add_marker, add_circle_marker, centered_metric
 
 #Using 18 logical cores
 os.environ['LOKY_MAX_CPU_COUNT'] = '18'
 
-#Loading Data (drive)
+#Loading Data
 # links = [
 #     "https://drive.google.com/file/d/1x4Ph_EfAo1994I4JVrGwPDmi0y-Vtt0q/edit?usp=drive_link",
 #     "https://drive.google.com/file/d/19i47foVILPjmA4RyKP4WEBQFXSEvLyEe/edit?usp=drive_link",
-#     "https://drive.google.com/file/d/12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw/edit?usp=drive_link"
+#     "https://drive.google.com/file/d/12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw/edit?usp=drive_link",
+#     "https://drive.google.com/file/d/1izRBstasxVBKQY1dNJdaaqEvNwbFSREk/edit?usp=drive_link"
 # ]
 
-# #Downloading data
+# # #Downloading data
 # dir = os.getcwd()
 # file_ids = [link.split('/d/')[1].split('/')[0] for link in links]
 # urls = [f'https://drive.google.com/uc?id={file_id}' for file_id in file_ids]
 # gdown.download(urls[0], os.path.join(dir,'hotspots_distance.xlsx'), quiet=False)
 # gdown.download(urls[1], os.path.join(dir,'greenspots.xlsx'), quiet=False)
 # gdown.download(urls[2], os.path.join(dir,'bluespots.xlsx'), quiet=False)
+# gdown.download(urls[3], os.path.join(dir,'arrival_time.xlsx'), quiet=False)
 # hotspots = pd.read_excel(os.path.join(dir,'hotspots_distance.xlsx'), dtype={'Postal Code': 'str','AED_distance': 'int','Ambulance_distance': 'int'})
 # greenspots = pd.read_excel(os.path.join(dir,'greenspots.xlsx'), dtype={'Cluster': 'int','id':'str'})
 # bluespots = pd.read_excel(os.path.join(dir,'bluespots.xlsx'), dtype={'Cluster': 'int','id':'str'})
+# arrival_time = pd.read_excel(os.path.join(dir,'arrival_time.xlsx'))
 
 #Loading AED data (locally)
 dir = os.getcwd()
 hotspots = pd.read_excel(os.path.join(dir,'hotspots_distance.xlsx'), dtype={'Postal Code': 'str','AED_distance': 'int','Ambulance_distance': 'int'})
 greenspots = pd.read_excel(os.path.join(dir,'greenspots.xlsx'), dtype={'Cluster': 'int','id':'str'})
 bluespots = pd.read_excel(os.path.join(dir,'bluespots.xlsx'), dtype={'Cluster': 'int','id':'str'})
+arrival_time = pd.read_excel(os.path.join(dir,'arrival_time.xlsx'),dtype={'Postal Code': 'str'})
 
 #Area of Brussels region
 brussels_coordinates = [50.8503, 4.3517]
 map_belgium = folium.Map(location=brussels_coordinates, zoom_start=12)
+
+#Adding title
+st.markdown(
+    """
+    <h1 style='text-align: center;'>AED Coverage and Cardiac Arrest Hotspots in Brussels</h1>
+    """,
+    unsafe_allow_html=True
+)
 
 #Adding user selections options
 intervention_type = st.selectbox('Intervention outcome degree of severity', ('Fatal', 'Non-Fatal', 'All', 'Critical location'))
@@ -59,6 +70,19 @@ postal_codes_options = ['All'] + sorted(interv_subset['Postal Code'].unique().as
 postal_code = st.selectbox('Focus on a particular postal code?', (postal_codes_options))
 if postal_code != 'All':
     interv_subset = interv_subset[interv_subset['Postal Code'] == postal_code]
+
+event_codes_options = ['All'] + sorted(interv_subset['Event Code'].unique().astype(str))
+event_code = st.selectbox('Event code:', (event_codes_options))
+if event_code != 'All':
+    interv_subset = interv_subset[interv_subset['Event Code'] == event_code]
+
+col1, col2 = st.columns(2)
+with col1:
+    centered_metric("Total number of interventions:", interv_subset.shape[0])
+    centered_metric("Total number of fatalities:", interv_subset[interv_subset['Dead'] == 'Yes'].shape[0])
+with col2:
+    centered_metric("Percentage of fataliteies:", f'{round((interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]/interv_subset.shape[0])*100,2)}%')
+    centered_metric("Average arrival time:", f'{round(arrival_time[arrival_time['Postal Code']==postal_code]['TravelTime_Destination_minutes'].iloc[0],2)} minutes')
 
 interv_subset['Cluster'] = pd.factorize(interv_subset['Cluster'])[0]
 
@@ -80,7 +104,21 @@ for _, row in interv_subset.iterrows():
 
 # Loading the map
 dir = os.getcwd()
-map_belgium.save(os.path.join(dir,'map_belgium.html'))
-map_html = open(os.path.join(dir,'map_belgium.html'), 'r').read()
-st.title('AED Coverage and Cardiac Arrest Hotspots in Brussels')
-st.components.v1.html(map_html, height=900, width=900)
+mappath = os.path.join(dir,'map_belgium.html')
+map_belgium.save(mappath)
+map_html = open(mappath, 'r').read()
+st.markdown(
+    """
+    <div style='text-align: center;'>
+    """,
+    unsafe_allow_html=True
+)
+
+st.components.v1.html(map_html, width=700, height=900)
+
+st.markdown(
+    """
+    </div>
+    """,
+    unsafe_allow_html=True
+)
