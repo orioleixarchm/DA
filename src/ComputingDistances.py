@@ -14,8 +14,7 @@ os.environ['LOKY_MAX_CPU_COUNT'] = '18'
 links = [
     "https://drive.google.com/file/d/1meuUUiUbCNDhhCvWTrs68gRgQ5qYQGcG/edit?usp=drive_link",
     "https://drive.google.com/file/d/19i47foVILPjmA4RyKP4WEBQFXSEvLyEe/edit?usp=drive_link",
-    "https://drive.google.com/file/d/12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw/edit?usp=drive_link",
-    "https://drive.google.com/file/d/1izRBstasxVBKQY1dNJdaaqEvNwbFSREk/edit?usp=drive_link"
+    "https://drive.google.com/file/d/12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw/edit?usp=drive_link"
 ]
 
 #Downloading data
@@ -25,18 +24,15 @@ urls = [f'https://drive.google.com/uc?id={file_id}' for file_id in file_ids]
 gdown.download(urls[0], os.path.join(dir,'hotspots.xlsx'), quiet=False)
 gdown.download(urls[1], os.path.join(dir,'greenspots.xlsx'), quiet=False)
 gdown.download(urls[2], os.path.join(dir,'bluespots.xlsx'), quiet=False)
-gdown.download(urls[3], os.path.join(dir,'arrival_time.xlsx'), quiet=False)
 hotspots = pd.read_excel(os.path.join(dir,'hotspots.xlsx'))
 greenspots = pd.read_excel(os.path.join(dir,'greenspots.xlsx'))
 bluespots = pd.read_excel(os.path.join(dir,'bluespots.xlsx'))
-arrival_time = pd.read_excel(os.path.join(dir,'arrival_time.xlsx'))
 
 #Loading AED data (locally)
 #dir = os.getcwd()
 #hotspots = pd.read_excel(os.path.join(dir,'hotspots.xlsx'))
 #greenspots = pd.read_excel(os.path.join(dir,'greenspots.xlsx'))
 #bluespots = pd.read_excel(os.path.join(dir,'bluespots.xlsx'))
-#arrival_time = pd.read_excel(os.path.join(dir,'arrival_time.xlsx'))
 
 #Creating K-d treea
 aed_matrix = greenspots[['Latitude', 'Longitude']].values
@@ -63,4 +59,4 @@ dir = os.getcwd()
 hotspots.to_excel(os.path.join(dir,'hotspots_distance.xlsx'), index=False)
 greenspots.to_excel(os.path.join(dir,'greenspots.xlsx'), index=False)
 bluespots.to_excel(os.path.join(dir,'bluespots.xlsx'), index=False)
-arrival_time.to_excel(os.path.join(dir,'arrival_time.xlsx'), index=False)
+
