@@ -36,13 +36,23 @@ intervb2['Event Code'] = intervb2['EventType and EventLevel'].str.split().str[0]
 intervb1['Postal Code'] = intervb1['postalcode_intervention']
 intervb2['Postal Code'] = intervb2['Cityname Intervention'].str.split().str[0].apply(lambda x: x if x.isdigit() else np.nan)
 
-intervb1 = intervb1[['Event Code','latitude_intervention', 'longitude_intervention','abandon_reason','Postal Code']].rename(columns={'latitude_intervention':'latitude', 
+intervb1['t2'] = pd.to_datetime(intervb1['t2'], format="mixed")
+intervb1['t3'] = pd.to_datetime(intervb1['t3'], format="mixed")
+intervb1['TravelTime_Destination'] = intervb1['t3']-intervb1['t2']
+intervb1['TravelTime_Destination_minutes'] = intervb1['TravelTime_Destination'].apply(lambda x: x.total_seconds()/60 if pd.notna(x) else np.nan)
+intervb2['T2'] = pd.to_datetime(intervb2['T2'], format="%d%b%y:%H:%M:%S")
+intervb2['T3'] = pd.to_datetime(intervb2['T3'], format="%d%b%y:%H:%M:%S")
+intervb2['TravelTime_Destination'] = intervb2['T3']-intervb2['T2']
+intervb2['TravelTime_Destination_minutes'] = intervb2['TravelTime_Destination'].apply(lambda x: x.total_seconds()/60 if pd.notna(x) else np.nan)
+
+intervb1 = intervb1[['Event Code','latitude_intervention', 'longitude_intervention','abandon_reason','Postal Code','TravelTime_Destination_minutes']].rename(columns={'latitude_intervention':'latitude', 
                                                                                                            'longitude_intervention':'longitude',
                                                                                                            'abandon_reason':'Abandon_Reason'})
-intervb2 = intervb2[['Event Code','Latitude intervention','Longitude intervention','Abandon reason FR','Postal Code']].rename(columns={'Latitude intervention':'latitude', 
+intervb2 = intervb2[['Event Code','Latitude intervention','Longitude intervention','Abandon reason FR','Postal Code','TravelTime_Destination_minutes']].rename(columns={'Latitude intervention':'latitude', 
                                                                                                            'Longitude intervention':'longitude',
                                                                                                            'Abandon reason FR':'Abandon_Reason'})
 interventions = pd.concat([intervb1,intervb2], ignore_index=True).reset_index(drop=True)
+time_arrival = interventions[['TravelTime_Destination_minutes','Postal Code']].groupby('Postal Code').mean().reset_index()
 interventions = interventions.loc[(~interventions['Abandon_Reason'].isin(['Error','Erreur'])) & (interventions['Event Code'].isin(['P039','P011','P003','P000'])),:]
 interventions = interventions.dropna(subset=['longitude','latitude','Postal Code'])
 interventions[['longitude','latitude']] = interventions[['longitude','latitude']].astype(int).astype(str)
@@ -50,11 +60,16 @@ interventions['Latitude'] = interventions['latitude'].apply(lambda x: x[:2] + '.
 interventions['Longitude'] = interventions['longitude'].apply(lambda x: x[:1] + '.' + x[1:])
 interventions['Dead'] = np.where(interventions['Abandon_Reason'].isin(['DCD','Overleden']),'Yes','No')
 interventions['Postal Code'] = interventions['Postal Code'].astype(int).astype(str)
-interventions.drop(columns=['longitude','latitude'],inplace=True)
+interventions.drop(columns=['longitude','latitude','TravelTime_Destination_minutes'],inplace=True)
 interventions.drop_duplicates(subset=['Event Code','Postal Code','Latitude','Longitude','Dead'], inplace=True)
 interventions.dropna(subset=['Latitude','Longitude'])
 print(interventions.head())
 print(interventions.tail())
+
+time_arrival = time_arrival.loc[time_arrival['Postal Code'].isin(interventions['Postal Code'].unique()),:].fillna(time_arrival['TravelTime_Destination_minutes'].mean())
+time_arrival = time_arrival._append({'Postal Code':'All','TravelTime_Destination_minutes':time_arrival['TravelTime_Destination_minutes'].mean()},ignore_index=True)
+print(time_arrival.head())
+print(time_arrival.tail())
 
 #AEDs Cleaning
 aed = aed[['Latitude','Longitude','Region','id']].dropna()
@@ -73,3 +88,4 @@ dir = os.getcwd()
 interventions.to_excel(os.path.join(dir,'interventions.xlsx'), index=False)
 aed.to_excel(os.path.join(dir,'aed.xlsx'), index=False)
 ambulances.to_excel(os.path.join(dir,'ambulances.xlsx'), index=False)
+time_arrival.to_excel(os.path.join(dir,'arrival_time.xlsx'), index=False)
