@@ -60,3 +60,4 @@ hotspots.to_excel(os.path.join(dir,'hotspots_distance.xlsx'), index=False)
 greenspots.to_excel(os.path.join(dir,'greenspots.xlsx'), index=False)
 bluespots.to_excel(os.path.join(dir,'bluespots.xlsx'), index=False)
 
+
