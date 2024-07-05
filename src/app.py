@@ -122,3 +122,44 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+#Adding Fatalities data frame
+total_interventions = interv_subset.groupby('Postal Code').size().reset_index(name='Interventions')
+total_fatal = interv_subset[interv_subset['Dead'] == 'Yes'].groupby('Postal Code').size().reset_index(name='Fatalities')
+df = pd.merge(total_interventions,total_fatal, on='Postal Code', how='left')
+df['Fatalities'] = df['Fatalities'].fillna(0).astype(int)
+df['Pct Fatality'] = df.apply(lambda row: f'{round((row['Fatalities']/row['Interventions'])*100,2)}%',axis=1)
+df = df.sort_values(by=['Pct Fatality','Fatalities'], ascending=[False, False])
+
+st.markdown(
+    """
+    <h3 style='text-align: center;'>Top 5 Fatality percentage per Postal Code</h3>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown(
+    """
+    <div style='display: flex; justify-content: center;'>
+        <div style='width: 50%;'>
+            {}
+        </div>
+    </div>
+    """.format(df.head().to_html(index=False)),
+    unsafe_allow_html=True
+)
+st.markdown(
+    """
+    <h3 style='text-align: center;'>Bottom 5 Fatality percentage per Postal Code</h3>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown(
+    """
+    <div style='display: flex; justify-content: center;'>
+        <div style='width: 50%;'>
+            {}
+        </div>
+    </div>
+    """.format(df.tail().to_html(index=False)),
+    unsafe_allow_html=True
+)
