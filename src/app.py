@@ -63,6 +63,11 @@ elif intervention_type == 'Non-Fatal':
 else:
     interv_subset = hotspots
 
+event_codes_options = ['All'] + sorted(interv_subset['Event Code'].unique().astype(str))
+event_code = st.selectbox('Event code:', (event_codes_options))
+if event_code != 'All':
+    interv_subset = interv_subset[interv_subset['Event Code'] == event_code]
+    
 postal_codes_options = ['All'] + sorted(interv_subset['Postal Code'].unique().astype(str))
 postal_code = st.selectbox('Focus on a particular postal code?', (postal_codes_options))
 if postal_code != 'All':
@@ -70,11 +75,6 @@ if postal_code != 'All':
     travel_time = interv_subset[interv_subset['Postal Code']==postal_code]['TravelTime_Destination_minutes'].iloc[0]
 else:
     travel_time = interv_subset['TravelTime_Destination_minutes'].mean()
-
-event_codes_options = ['All'] + sorted(interv_subset['Event Code'].unique().astype(str))
-event_code = st.selectbox('Event code:', (event_codes_options))
-if event_code != 'All':
-    interv_subset = interv_subset[interv_subset['Event Code'] == event_code]
 
 col1, col2 = st.columns(2)
 with col1:
