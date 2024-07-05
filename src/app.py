@@ -147,19 +147,3 @@ st.markdown(
     """.format(df.head().to_html(index=False)),
     unsafe_allow_html=True
 )
-st.markdown(
-    """
-    <h3 style='text-align: center;'>Bottom 5 Fatality percentage per Postal Code</h3>
-    """,
-    unsafe_allow_html=True
-)
-st.markdown(
-    """
-    <div style='display: flex; justify-content: center;'>
-        <div style='width: 50%;'>
-            {}
-        </div>
-    </div>
-    """.format(df.tail().to_html(index=False)),
-    unsafe_allow_html=True
-)
