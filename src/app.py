@@ -69,7 +69,6 @@ if postal_code != 'All':
     interv_subset = interv_subset[interv_subset['Postal Code'] == postal_code]
     travel_time = interv_subset[interv_subset['Postal Code']==postal_code]['TravelTime_Destination_minutes'].iloc[0]
 else:
-    interv_subset = interv_subset
     travel_time = interv_subset['TravelTime_Destination_minutes'].mean()
 
 event_codes_options = ['All'] + sorted(interv_subset['Event Code'].unique().astype(str))
