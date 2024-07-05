@@ -50,8 +50,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-#Adding user selections options
-intervention_type = st.selectbox('Intervention outcome degree of severity', ('Fatal', 'Non-Fatal', 'All', 'Critical location'))
+#Adding user selections options and metrics
+intervention_type = st.selectbox('Intervention outcome degree of severity:', ('Fatal', 'Non-Fatal', 'All', 'Critical location'))
 if intervention_type == 'Critical location':
     aed_distance = st.number_input('Set critical distance to AED (meters)', min_value=0, value=500)
     ambulance_distance = st.number_input('Set critical distance to Ambulance (meters)', min_value=0, value=3000)
@@ -67,12 +67,12 @@ event_codes_options = ['All'] + sorted(interv_subset['Event Code'].unique().asty
 event_code = st.selectbox('Event code:', (event_codes_options))
 if event_code != 'All':
     interv_subset = interv_subset[interv_subset['Event Code'] == event_code]
-    
+
 postal_codes_options = ['All'] + sorted(interv_subset['Postal Code'].unique().astype(str))
 postal_code = st.selectbox('Focus on a particular postal code?', (postal_codes_options))
 if postal_code != 'All':
     interv_subset = interv_subset[interv_subset['Postal Code'] == postal_code]
-    travel_time = interv_subset[interv_subset['Postal Code']==postal_code]['TravelTime_Destination_minutes'].iloc[0]
+    travel_time = interv_subset['TravelTime_Destination_minutes'].mean()
 else:
     travel_time = interv_subset['TravelTime_Destination_minutes'].mean()
 
@@ -114,7 +114,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.components.v1.html(map_html, width=700, height=900)
+st.components.v1.html(map_html, width=700, height=800)
 
 st.markdown(
     """
@@ -124,16 +124,17 @@ st.markdown(
 )
 
 #Adding Fatalities data frame
+criteria = st.selectbox('Order varible:', ('Pct Fatality', 'Fatalities', 'Interventions'))
 total_interventions = interv_subset.groupby('Postal Code').size().reset_index(name='Interventions')
 total_fatal = interv_subset[interv_subset['Dead'] == 'Yes'].groupby('Postal Code').size().reset_index(name='Fatalities')
 df = pd.merge(total_interventions,total_fatal, on='Postal Code', how='left')
 df['Fatalities'] = df['Fatalities'].fillna(0).astype(int)
 df['Pct Fatality'] = df.apply(lambda row: f'{round((row['Fatalities']/row['Interventions'])*100,2)}%',axis=1)
-df = df.sort_values(by=['Pct Fatality','Fatalities'], ascending=[False, False])
+df = df.sort_values(by=criteria, ascending=False)
 
 st.markdown(
-    """
-    <h3 style='text-align: center;'>Top 5 Fatality percentage per Postal Code</h3>
+    f"""
+    <h3 style='text-align: center;'>Top 5 {criteria} per Postal Code</h3>
     """,
     unsafe_allow_html=True
 )
