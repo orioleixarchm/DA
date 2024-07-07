@@ -17,9 +17,9 @@ Each program creates data stored locally for the next one untill the app is exec
 
 ## Order of execution
 All programs can retreive data in two ways:
-- **Drive**: All programs will retreive the data stored in a drive instead of the newly locally created data, this can be change by uncomenting portions of existing code in each program. The app program will by default retreive the data from the local directory.
+- **Drive**: All programs will retreive the data stored in a drive instead of the newly locally created data, this can be modified by uncomenting portions of existing code in each program. The app program will retrieve by default data from the local directory.
   - The following running order ensures better performance: _Computing Distances.py -> app.py_. Data can be accessed in _app.py_ directly via drive if the specific portion of the code is uncommented.
-- **Locally**: All programs (except _AEDs Coordinates.py_) can retrieve the necessary data from the local directory once created by the previous program/s. Portions of the code need to be uncomented.
+- **Locally**: All programs (except _AEDs Coordinates.py_) can retrieve the necessary data from the local directory once created by the previous program/s. Portions of the code need to be uncomented in each program.
   - The following running order must be ensured: _AEDs Coordinates.py -> DataBrussels.py -> Clustering.py -> Computing Distances.py -> app.py_.
 
 Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take up to 4 hours, therefore I encourage the user to either follow running option 1 or, at least use the drive to get until the second step of the dataflow and run locally only the following part _DataBrussels.py -> Clustering.py -> Computing Distances.py -> app.py_ skipping the first porogram as the data created therein is stored in the drive.
@@ -31,12 +31,12 @@ Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take
 - **Clustering.py**: Performs clustering analysis to identify hotspots and clusters of AEDs and emergency services.
 - **Computing Distances.py**: Calculates the distances between all interventions and the closest AED and emergency services.
 - **utilities.py**: Contains utility functions used across various scripts.
-- **setup_tests.py**: Script to download or generate necessary test data.
+- **basic_test.py**: Script to download and test the quality of the data.
 
 ### Directory Structure
 - **Project directory**
   - **src**: Contains all the source code including the main application and supporting scripts.
-  - **tests**: Contains the test script for validating the functionality of the application, which for the sake of simplicity include only basic tets.
+  - **tests**: Contains the test script for validating the functionality of the application, which for the sake of simplicity includes only basic tets.
   - Other files: `.gitignore`, `README.md`, `requirements.txt`, `setup.py`, `setup_tests.py`, `Makefile`, `LICENSE`.
 
 ## Mission
