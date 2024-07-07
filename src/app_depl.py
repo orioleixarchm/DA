@@ -21,7 +21,7 @@ links = [
 ]
 
 def load_data(url):
-    return pd.read_excel(url)
+    return pd.read_excel(url,engine='openpyxl')
 
 #Loading AED data (locally)
 dir = os.getcwd()
