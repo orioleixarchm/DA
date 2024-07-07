@@ -45,6 +45,10 @@ The mission of this project is to enhance the emergency response system in Bruss
 ## Setup and Installation
 To set up and run the project, follow these steps:
 
+### First Step
+- Clone repository: `git clone https://github.com/orioleixarchm/DA.git`.
+- Set directory: `cd DA`.
+
 ### Install Dependencies
 - Ensure Python is installed.
 - Install the required dependencies.
