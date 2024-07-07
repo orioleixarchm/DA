@@ -46,6 +46,7 @@ clean:
 	rmdir /s /q build
 	rmdir /s /q dist
 	del /s /q *.egg-info
+	rd /s /q DA
 	@echo "Cleanup complete."
 
 test:
