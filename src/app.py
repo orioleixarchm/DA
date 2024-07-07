@@ -81,8 +81,8 @@ with col1:
     centered_metric("Total number of interventions:", interv_subset.shape[0])
     centered_metric("Total number of fatalities:", interv_subset[interv_subset['Dead'] == 'Yes'].shape[0])
 with col2:
-    centered_metric("Percentage of fataliteies:", f'{round((interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]/interv_subset.shape[0])*100,2)}%')
-    centered_metric("Average arrival time:", f'{round(travel_time,2)} minutes')
+    centered_metric("Percentage of fatalities:", f"{round((interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]/interv_subset.shape[0])*100,2)}%")
+    centered_metric("Average arrival time:", f"{round(travel_time,2)} minutes")
 
 interv_subset['Cluster'] = pd.factorize(interv_subset['Cluster'])[0]
 
@@ -129,7 +129,7 @@ total_interventions = interv_subset.groupby('Postal Code').size().reset_index(na
 total_fatal = interv_subset[interv_subset['Dead'] == 'Yes'].groupby('Postal Code').size().reset_index(name='Fatalities')
 df = pd.merge(total_interventions,total_fatal, on='Postal Code', how='left')
 df['Fatalities'] = df['Fatalities'].fillna(0).astype(int)
-df['Pct Fatality'] = df.apply(lambda row: f'{round((row['Fatalities']/row['Interventions'])*100,2)}%',axis=1)
+df['Pct Fatality'] = df.apply(lambda row: f"{round((row['Fatalities']/row['Interventions'])*100,2)}%",axis=1)
 df = df.sort_values(by=criteria, ascending=False)
 
 st.markdown(
