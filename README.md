@@ -54,7 +54,7 @@ To set up and run the project, follow these steps:
 - Install the required dependencies.
 
 ### Run the Setup Script
-- Execute the script to install the project and its dependencies into the Python environment.
+- Execute the script to install the project and its dependencies into the Python environment `python setup.py install`. 
 
 ### Run the Application
 - Run the required programs (at least _Computing Distances.py_).
