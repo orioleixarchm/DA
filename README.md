@@ -19,7 +19,7 @@ Each program creates data stored locally for the next one untill the app is exec
 All programs can retreive data in two ways:
 - **Drive**: All programs will retreive the data stored in a drive instead of the newly locally created data, this can be change by uncomenting portions of existing code in each program. The app program will by default retreive the data from the local directory.
   - The following running order ensures better performance: _Computing Distances.py -> app.py_. Data can be accessed in _app.py_ directly via drive if the specific portion of the code is uncommented.
-- **Locally**: All programs (except _AEDs Coordinates.py_) can retrieve the necessary data from the local directory once created by the previous program. Portions of the code need to be uncomented.
+- **Locally**: All programs (except _AEDs Coordinates.py_) can retrieve the necessary data from the local directory once created by the previous program/s. Portions of the code need to be uncomented.
   - The following running order must be ensured: _AEDs Coordinates.py -> DataBrussels.py -> Clustering.py -> Computing Distances.py -> app.py_.
 
 Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take up to 4 hours, therefore I encourage the user to either follow running option 1 or, at least use the drive to get until the second step of the dataflow and run locally only the following part _DataBrussels.py -> Clustering.py -> Computing Distances.py -> app.py_ skipping the first porogram as the data created therein is stored in the drive.
