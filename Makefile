@@ -40,7 +40,7 @@ run:
 
 clean:
 	@echo "Cleaning project..."
-	@cd %USERPROFILE% && for /d /r . %%a in (DA) do if exist "%%a" rd /s /q "%%a"
+	cd %USERPROFILE% && for /d /r . %a in (DA) do if exist "%a" rd /s /q "%a"
 	@echo "Cleanup complete."
 
 test:
