@@ -25,7 +25,8 @@ If the suer is interested in run the data flow and app locally it is worth notin
 Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take up to 4 hours, therefore I encourage the user to either follow running option 1 or, at least use the drive to get until the second step of the dataflow and run locally only the following part _DataBrussels.py -> Clustering.py -> Computing Distances.py -> app.py_ skipping the first porogram as the data created therein is stored in the drive.
 
 ### Parts and Programs
-- **app.py**: Main Streamlit application that visualizes the AED locations, emergency services, and cardiac arrest hotspots on an interactive map.
+- **app.py**: Main Streamlit application that visualizes the AED locations, emergency services, and cardiac arrest hotspots on an interactive map, version non-deployed used for testing.
+- **app_depl.py**: Deployed application.
 - **AEDs Coordinates.py**: Processes and compute the coordinates (latitde and longitude) of each AED based on their address.
 - **DataBrussels.py**: Creates the clean datasets for ambulances, interventions and AEDs.
 - **Clustering.py**: Performs clustering analysis to identify hotspots and clusters of AEDs and emergency services.
