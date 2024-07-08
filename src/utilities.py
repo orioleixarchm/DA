@@ -64,6 +64,5 @@ def centered_metric(label, value):
 
 def load_data(url):
     response = requests.get(url)
-    response.raise_for_status()  # Check that the request was successful
     file_stream = BytesIO(response.content)
     return pd.read_excel(file_stream, engine='openpyxl')
