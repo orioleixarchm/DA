@@ -16,7 +16,7 @@ The project consists of several Python scripts and a Streamlit application.
 Each program creates data stored locally for the next one untill the app is executed.
 
 ## Order of execution
-All programs can retreive data in two ways:
+If the suer is interested in run the data flow and app locally it is worth noting that all programs can retreive data in two ways:
 - **Drive**: All programs will retreive the data stored in a drive instead of the newly locally created data, this can be modified by uncomenting portions of existing code in each program. The app program will retrieve by default data from the local directory.
   - The following running order ensures better performance: _Computing Distances.py -> app.py_. Data can be accessed in _app.py_ directly via drive if the specific portion of the code is uncommented.
 - **Locally**: All programs (except _AEDs Coordinates.py_) can retrieve the necessary data from the local directory once created by the previous program/s. Portions of the code need to be uncomented in each program.
@@ -43,7 +43,7 @@ Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take
 The mission of this project is to enhance the emergency response system in Brussels by providing a functional analysis of AED coverage and the spatial relationship between emergency services and cardiac arrest incidents. By identifying areas with insufficient coverage, the project aims to recommend strategic placements of additional AEDs and optimize emergency response routes while offering a certain flexibility to accomodate different scenarios and strategies (critical distances are defined by the user).
 
 The deployed app can be used here [[https://hshgqmnzlbwn5bihgrgxll.streamlit.app/
-](https://hshgqmnzlbwn5bihgrgxll.streamlit.app/)](https://hshgqmnzlbwn5bihgrgxll.streamlit.app/).
+](https://hshgqmnzlbwn5bihgrgxll.streamlit.app/)](APP).
 ## Setup and Installation
 To set up and run the project, follow these steps:
 
