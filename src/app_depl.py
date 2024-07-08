@@ -8,9 +8,9 @@ import streamlit as st
 import folium
 import os
 import gdown
-from utilities import add_marker, add_circle_marker, centered_metric, load_data
 import requests
 from io import BytesIO
+from utilities import add_marker, add_circle_marker, centered_metric, load_data
 
 #Using 18 logical cores
 os.environ['LOKY_MAX_CPU_COUNT'] = '18'
@@ -21,18 +21,6 @@ links = [
     "https://drive.google.com/uc?id=19i47foVILPjmA4RyKP4WEBQFXSEvLyEe&export=download",
     "https://drive.google.com/uc?id=12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw&export=download",
 ]
-
-@st.cache_data
-def load_data(url, postalcode = 0):
-    if postalcode==0:   
-        response = requests.get(url)
-        file_stream = BytesIO(response.content)
-        return pd.read_excel(file_stream, engine='openpyxl')
-    elif postalcode==1:
-        response = requests.get(url)
-        file_stream = BytesIO(response.content)
-        return pd.read_excel(file_stream, engine='openpyxl', dtype={'Postal Code': 'str'})
-
 
 # #Downloading data
 hotspots = load_data(links[0],postalcode=1)
