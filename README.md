@@ -43,7 +43,7 @@ Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take
 The mission of this project is to enhance the emergency response system in Brussels by providing a functional analysis of AED coverage and the spatial relationship between emergency services and cardiac arrest incidents. By identifying areas with insufficient coverage, the project aims to recommend strategic placements of additional AEDs and optimize emergency response routes while offering a certain flexibility to accomodate different scenarios and strategies (critical distances are defined by the user).
 
 The deployed app can be used here [[https://hshgqmnzlbwn5bihgrgxll.streamlit.app/
-](https://hshgqmnzlbwn5bihgrgxll.streamlit.app/)](APP).
+](https://hshgqmnzlbwn5bihgrgxll.streamlit.app/)].
 ## Setup and Installation
 To set up and run the project, follow these steps:
 
