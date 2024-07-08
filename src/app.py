@@ -27,7 +27,7 @@ os.environ['LOKY_MAX_CPU_COUNT'] = '18'
 # gdown.download(urls[0], os.path.join(dir,'hotspots_distance.xlsx'), quiet=False)
 # gdown.download(urls[1], os.path.join(dir,'greenspots.xlsx'), quiet=False)
 # gdown.download(urls[2], os.path.join(dir,'bluespots.xlsx'), quiet=False)
-# hotspots = pd.read_excel(os.path.join(dir,'hotspots_distance.xlsx'), dtype={'Postal Code': 'str','AED_distance': 'int','Ambulance_distance': 'int'})
+# hotspots = pd.read_excel(os.path.join(dir,'hotspots_distance.xlsx'), dtype={'Postal Code': 'str'})
 # greenspots = pd.read_excel(os.path.join(dir,'greenspots.xlsx'), dtype={'Cluster': 'int','id':'str'})
 # bluespots = pd.read_excel(os.path.join(dir,'bluespots.xlsx'), dtype={'Cluster': 'int','id':'str'})
 
