@@ -8,9 +8,9 @@ import streamlit as st
 import folium
 import os
 import gdown
+from utilities import add_marker, add_circle_marker, centered_metric, load_data
 import requests
 from io import BytesIO
-from utilities import add_marker, add_circle_marker, centered_metric, load_data
 
 #Using 18 logical cores
 os.environ['LOKY_MAX_CPU_COUNT'] = '18'
@@ -21,6 +21,18 @@ links = [
     "https://drive.google.com/uc?id=19i47foVILPjmA4RyKP4WEBQFXSEvLyEe&export=download",
     "https://drive.google.com/uc?id=12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw&export=download",
 ]
+
+@st.cache_data
+def load_data(url, postalcode = 0):
+    if postalcode==0:   
+        response = requests.get(url)
+        file_stream = BytesIO(response.content)
+        return pd.read_excel(file_stream, engine='openpyxl')
+    elif postalcode==1:
+        response = requests.get(url)
+        file_stream = BytesIO(response.content)
+        return pd.read_excel(file_stream, engine='openpyxl', dtype={'Postal Code': 'str'})
+
 
 # #Downloading data
 hotspots = load_data(links[0],postalcode=1)
@@ -70,8 +82,8 @@ with col1:
     centered_metric("Total number of interventions:", interv_subset.shape[0])
     centered_metric("Total number of fatalities:", interv_subset[interv_subset['Dead'] == 'Yes'].shape[0])
 with col2:
-    centered_metric("Percentage of fataliteies:", f'{round((interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]/interv_subset.shape[0])*100,2)}%')
-    centered_metric("Average arrival time:", f'{round(travel_time,2)} minutes')
+    centered_metric("Percentage of fataliteies:", f"{round((interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]/interv_subset.shape[0])*100,2)}%")
+    centered_metric("Average arrival time:", f"{round(travel_time,2)} minutes")
 
 interv_subset['Cluster'] = pd.factorize(interv_subset['Cluster'])[0]
 
@@ -118,7 +130,7 @@ total_interventions = interv_subset.groupby('Postal Code').size().reset_index(na
 total_fatal = interv_subset[interv_subset['Dead'] == 'Yes'].groupby('Postal Code').size().reset_index(name='Fatalities')
 df = pd.merge(total_interventions,total_fatal, on='Postal Code', how='left')
 df['Fatalities'] = df['Fatalities'].fillna(0).astype(int)
-df['Pct Fatality'] = df.apply(lambda row: f'{round((row['Fatalities']/row['Interventions'])*100,2)}%',axis=1)
+df['Pct Fatality'] = df.apply(lambda row: f"{round((row['Fatalities']/row['Interventions'])*100,2)}%",axis=1)
 df = df.sort_values(by=criteria, ascending=False)
 
 st.markdown(
