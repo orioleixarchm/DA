@@ -11,6 +11,8 @@ import numpy as np
 from geopy.distance import geodesic
 import streamlit as st
 import folium
+import requests
+from io import BytesIO
 
 #Reusable functions
 def geocode_address(row):
@@ -59,3 +61,9 @@ def centered_metric(label, value):
         """,
         unsafe_allow_html=True
     )
+
+def load_data(url):
+    response = requests.get(url)
+    response.raise_for_status()  # Check that the request was successful
+    file_stream = BytesIO(response.content)
+    return pd.read_excel(file_stream, engine='openpyxl')
