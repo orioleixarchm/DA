@@ -62,7 +62,12 @@ def centered_metric(label, value):
         unsafe_allow_html=True
     )
 
-def load_data(url):
-    response = requests.get(url)
-    file_stream = BytesIO(response.content)
-    return pd.read_excel(file_stream, engine='openpyxl')
+def load_data(url, postalcode = 0):
+    if postalcode==0:   
+        response = requests.get(url)
+        file_stream = BytesIO(response.content)
+        return pd.read_excel(file_stream, engine='openpyxl')
+    elif postalcode==1:
+        response = requests.get(url)
+        file_stream = BytesIO(response.content)
+        return pd.read_excel(file_stream, engine='openpyxl', dtype={'Postal Code': 'str'})
