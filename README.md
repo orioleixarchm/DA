@@ -13,7 +13,8 @@ The following kinds of intervention have been used:
 
 ## Project Structure
 The project consists of several Python scripts and a Streamlit application.
-Each program creates data stored locally for the next one untill the app is executed.
+Locally, each program creates data stored locally for the next one untill the app is executed.
+The app has been deployed via streamlit and can be checked here: https://g4ahg4xw73pespmhcipyh8.streamlit.app/.
 
 ## Order of execution
 If the suer is interested in run the data flow and app locally it is worth noting that all programs can retreive data in two ways:
@@ -43,7 +44,6 @@ Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take
 ## Mission
 The mission of this project is to enhance the emergency response system in Brussels by providing a functional analysis of AED coverage and the spatial relationship between emergency services and cardiac arrest incidents. By identifying areas with insufficient coverage, the project aims to recommend strategic placements of additional AEDs and optimize emergency response routes while offering a certain flexibility to accomodate different scenarios and strategies (critical distances are defined by the user).
 
-The deployed app can be used here: https://g4ahg4xw73pespmhcipyh8.streamlit.app/.
 ## Setup and Installation
 To set up and run the project, follow these steps:
 
