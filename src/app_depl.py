@@ -82,7 +82,7 @@ with col1:
     centered_metric("Total number of interventions:", interv_subset.shape[0])
     centered_metric("Total number of fatalities:", interv_subset[interv_subset['Dead'] == 'Yes'].shape[0])
 with col2:
-    centered_metric("Percentage of fataliteies:", f"{round((interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]/interv_subset.shape[0])*100,2)}%")
+    centered_metric("Percentage of fatalities:", f"{round((interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]/interv_subset.shape[0])*100,2)}%")
     centered_metric("Average arrival time:", f"{round(travel_time,2)} minutes")
 
 interv_subset['Cluster'] = pd.factorize(interv_subset['Cluster'])[0]
