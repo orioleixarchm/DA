@@ -14,6 +14,7 @@ The following kinds of intervention have been used:
 ## Project Structure
 The project consists of several Python scripts and a Streamlit application.
 Locally, each program creates data stored locally for the next one untill the app is executed.
+
 The app has been deployed via streamlit and can be checked here: https://g4ahg4xw73pespmhcipyh8.streamlit.app/.
 
 ## Order of execution
