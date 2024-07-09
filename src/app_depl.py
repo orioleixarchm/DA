@@ -22,19 +22,7 @@ links = [
     "https://drive.google.com/uc?id=12UFMCiZhiIhau1dNUBUdPaOm_KBGVOhw&export=download",
 ]
 
-@st.cache_data
-def load_data(url, postalcode = 0):
-    if postalcode==0:   
-        response = requests.get(url)
-        file_stream = BytesIO(response.content)
-        return pd.read_excel(file_stream, engine='openpyxl')
-    elif postalcode==1:
-        response = requests.get(url)
-        file_stream = BytesIO(response.content)
-        return pd.read_excel(file_stream, engine='openpyxl', dtype={'Postal Code': 'str'})
-
-
-# #Downloading data
+#Downloading data
 hotspots = load_data(links[0],postalcode=1)
 greenspots = load_data(links[1],postalcode=0)
 bluespots = load_data(links[2],postalcode=0)
