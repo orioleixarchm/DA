@@ -50,7 +50,7 @@ st.markdown(
 )
 
 #Adding user selections options and metrics
-intervention_type = st.selectbox('Intervention outcome degree of severity:', ('Fatal', 'Non-Fatal', 'All', 'Critical location'))
+intervention_type = st.selectbox('Intervention Criticallity:', ('All', 'Fatal', 'Non-Fatal', 'Critical location'))
 if intervention_type == 'Critical location':
     aed_distance = st.number_input('Set critical distance to AED (meters)', min_value=0, value=500)
     ambulance_distance = st.number_input('Set critical distance to Ambulance (meters)', min_value=0, value=3000)
