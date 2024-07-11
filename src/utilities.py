@@ -17,6 +17,7 @@ from io import BytesIO
 
 #Reusable functions
 def geocode_address(row):
+    geolocator = Nominatim(user_agent="aed_geoloc")
     location = geolocator.geocode(row['Full_adress'])
     if location:
         return pd.Series([location.latitude, location.longitude])
