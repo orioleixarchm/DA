@@ -82,13 +82,15 @@ for _, row in greenspots.iterrows():
 for _, row in bluespots.iterrows():
     add_marker(row, map_belgium, 'blue', 'plus-sign', f"Ambulance: {row['id']}")
 
-num_clusters = interv_subset['Cluster'].nunique()
-colormap = plt.get_cmap('Set1', num_clusters)
-interv_color = 'red'
+interv_subset['Event Code'] = pd.factorize(interv_subset['Event Code'])[0]
+num_events = interv_subset['Event Code'].nunique()
+colormap = plt.get_cmap('Set1', num_events)
+event_colors = [colors.rgb2hex(colormap(i % colormap.N)) for i in range(num_events)]
 
 #Adding intervention hotspots to the map
 for _, row in interv_subset.iterrows():
-    add_circle_marker(row, map_belgium, interv_color)
+    event_color = event_colors[row['Event Code']]
+    add_circle_marker(row, map_belgium, event_color)
 
 # Loading the map
 dir = os.getcwd()
