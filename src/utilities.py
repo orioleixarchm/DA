@@ -9,6 +9,7 @@ and visualization used across different parts of the project.
 import pandas as pd
 import numpy as np
 from geopy.distance import geodesic
+from geopy.geocoders import Nominatim
 import streamlit as st
 import folium
 import requests
