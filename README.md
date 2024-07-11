@@ -40,7 +40,7 @@ Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take
 - **Project directory**
   - **src**: Contains all the source code including the main application and supporting scripts.
   - **tests**: Contains the test script for validating the functionality of the application, which for the sake of simplicity includes only basic tets.
-  - Other files: `.gitignore`, `README.md`, `requirements.txt`, `setup.py`, `setup_tests.py`, `Makefile`, `LICENSE`.
+  - Other files: `README.md`, `requirements.txt`, `setup.py`, `setup_tests.py`, `Makefile`, `LICENSE`.
 
 ## Mission
 The mission of this project is to enhance the emergency response system in Brussels by providing a functional analysis of AED coverage and the spatial relationship between emergency services and cardiac arrest incidents. By identifying areas with insufficient coverage, the project aims to recommend strategic placements of additional AEDs and optimize emergency response routes while offering a certain flexibility to accomodate different scenarios and strategies (critical distances are defined by the user).
