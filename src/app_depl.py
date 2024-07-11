@@ -73,8 +73,6 @@ with col2:
     centered_metric("Percentage of fatalities:", f"{round((interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]/interv_subset.shape[0])*100,2)}%")
     centered_metric("Average arrival time:", f"{round(travel_time,2)} minutes")
 
-interv_subset['Cluster'] = pd.factorize(interv_subset['Cluster'])[0]
-
 #Adding Ambulances and AEDs to the map
 for _, row in greenspots.iterrows():
     add_marker(row, map_belgium, 'green', 'plus-sign', f"AED: {row['id']}")
@@ -82,14 +80,14 @@ for _, row in greenspots.iterrows():
 for _, row in bluespots.iterrows():
     add_marker(row, map_belgium, 'blue', 'plus-sign', f"Ambulance: {row['id']}")
 
-interv_subset['Event Code'] = pd.factorize(interv_subset['Event Code'])[0]
-num_events = interv_subset['Event Code'].nunique()
+interv_subset['Event Code factor'] = pd.factorize(interv_subset['Event Code'])[0]
+num_events = interv_subset['Event Code factor'].nunique()
 colormap = plt.get_cmap('Set1', num_events)
 event_colors = [colors.rgb2hex(colormap(i % colormap.N)) for i in range(num_events)]
 
 #Adding intervention hotspots to the map
 for _, row in interv_subset.iterrows():
-    event_color = event_colors[row['Event Code']]
+    event_color = event_colors[row['Event Code factor']]
     add_circle_marker(row, map_belgium, event_color)
 
 # Loading the map
