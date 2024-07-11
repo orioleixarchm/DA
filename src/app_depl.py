@@ -84,12 +84,11 @@ for _, row in bluespots.iterrows():
 
 num_clusters = interv_subset['Cluster'].nunique()
 colormap = plt.get_cmap('Set1', num_clusters)
-cluster_colors = [colors.rgb2hex(colormap(i % colormap.N)) for i in range(num_clusters)]
+interv_color = 'red'
 
 #Adding intervention hotspots to the map
 for _, row in interv_subset.iterrows():
-    cluster_color = cluster_colors[row['Cluster']]
-    add_circle_marker(row, map_belgium, cluster_color)
+    add_circle_marker(row, map_belgium, interv_color)
 
 # Loading the map
 dir = os.getcwd()
