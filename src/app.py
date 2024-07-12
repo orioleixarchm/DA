@@ -127,7 +127,8 @@ total_interventions = interv_subset.groupby('Postal Code').size().reset_index(na
 total_fatal = interv_subset[interv_subset['Dead'] == 'Yes'].groupby('Postal Code').size().reset_index(name='Fatalities')
 df = pd.merge(total_interventions,total_fatal, on='Postal Code', how='left')
 df['Fatalities'] = df['Fatalities'].fillna(0).astype(int)
-df['Pct Fatality'] = df.apply(lambda row: f"{round((row['Fatalities']/row['Interventions'])*100,2)}%",axis=1)
+df['Pct Fatality'] = df.apply(lambda row: (row['Fatalities'] / row['Interventions']) * 100, axis=1)
+df['Pct Fatality'] = df['Pct Fatality'].apply(lambda x: f"{round(x, 2)}%")
 df = df.sort_values(by=criteria, ascending=False)
 
 st.markdown(
