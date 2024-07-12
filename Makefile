@@ -10,7 +10,8 @@ help:
 	@echo "  make data_brussels         - Run DataBrussels.py"
 	@echo "  make clustering            - Run Clustering.py"
 	@echo "  make computing_distances   - Run ComputingDistances.py"
-	@echo "  make run       - Run the application"
+	@echo "  make runT       - Run the test application"
+	@echo "  make run       - Run the test application"
 	@echo "  make clean     - Clean the project"
 	@echo "  make test      - Run the tests"
 
@@ -34,9 +35,13 @@ computing_distances:
 	@echo "Running ComputingDistances.py..."
 	python src/ComputingDistances.py
 
-run:
+runT:
 	@echo "Running application..."
 	streamlit run src/app.py
+
+run:
+	@echo "Running application..."
+	streamlit run src/app_depl.py
 
 clean:
 	@echo "Cleaning project..."
