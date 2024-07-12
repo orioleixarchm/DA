@@ -36,7 +36,7 @@ computing_distances:
 	python src/ComputingDistances.py
 
 runT:
-	@echo "Running application..."
+	@echo "Running test application..."
 	streamlit run src/app.py
 
 run:
