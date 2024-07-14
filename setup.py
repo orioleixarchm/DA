@@ -101,9 +101,9 @@ setup(
             'run-app=run_app:main',  # This creates a command 'run-app' that runs the 'main' function from 'run_app.py'
         ],
     },
-    author='Your Name',
-    author_email='your.email@example.com',
-    description='A brief description of your project',
+    author='Oriol Eixarch',
+    author_email='orioleixarchm@gmail.com',
+    description='The AED Coverage and Cardiac Arrest Hotspots in Brussels application is an interactive tool designed to visualize and analyze the distribution and accessibility of Automated External Defibrillators (AEDs) in Brussels.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/orioleixarchm/DA',
