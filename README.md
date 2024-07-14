@@ -35,6 +35,7 @@ Please, bear in mind that the first step, running _AEDs Coordinates.py_ can take
 - **Computing Distances.py**: Calculates the distances between all interventions and the closest AED and emergency services.
 - **utilities.py**: Contains utility functions used across various scripts.
 - **basic_test.py**: Script to download and test the quality of the data.
+- **run_app.py**: Runs the non-deployed Streamlit application from within a Python script
 
 ### Directory Structure
 - **Project directory**
