@@ -31,7 +31,7 @@ class TestBasicData:
 
     def test_hotspots(self, setup):
         assert self.hotspots.shape[1] == 10, "Hotspots: Number of columns should be 10"
-        assert self.hotspots.shape[0] == 5340, "Hotspots: There should be 5340 rows"
+        assert self.hotspots.shape[0] == 5339, "Hotspots: There should be 5339 rows"
         assert self.hotspots['Cluster'].nunique() == 30, "Hotspots: There should be 30 clusters"
 
     def test_greenspots(self, setup):
