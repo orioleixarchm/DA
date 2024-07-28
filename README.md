@@ -15,7 +15,7 @@ The following kinds of intervention have been used:
 The project consists of several Python scripts and a Streamlit application.
 Locally, each program creates data stored locally for the next one untill the app is executed.
 
-The app has been deployed via streamlit and can be checked here: https://g4ahg4xw73pespmhcipyh8.streamlit.app/.
+The app has been deployed via streamlit and can be checked [here](https://g4ahg4xw73pespmhcipyh8.streamlit.app/).
 
 ## Order of execution
 If the suer is interested in run the data flow and app locally it is worth noting that all programs can retreive data in two ways:
