@@ -18,7 +18,7 @@ Locally, each program creates data stored locally for the next one untill the ap
 The app has been deployed via streamlit and can be checked [here](https://g4ahg4xw73pespmhcipyh8.streamlit.app/).
 
 ## Order of execution
-If the suer is interested in run the data flow and app locally it is worth noting that all programs can retreive data in two ways:
+If the user is interested in run the data flow and app locally it is worth noting that all programs can retreive data in two ways:
 - **Drive**: All programs will retreive the data stored in a drive instead of the newly locally created data, this can be modified by uncomenting portions of existing code in each program. The app program will retrieve by default data from the local directory.
   - The following running order ensures better performance: _Computing Distances.py -> app.py_. Data can be accessed in _app.py_ directly via drive if the specific portion of the code is uncommented.
 - **Locally**: All programs (except _AEDs Coordinates.py_) can retrieve the necessary data from the local directory once created by the previous program/s. Portions of the code need to be uncomented in each program.
