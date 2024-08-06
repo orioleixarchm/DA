@@ -1,4 +1,4 @@
-# Medical Intervention Hotspots in Brussels
+# AED Coverage and Cardiac Arrest Hotspots in Brussels
 Modern Data Analytics App project.
 
 Oriol Eixarch Mejías.
