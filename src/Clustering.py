@@ -5,9 +5,6 @@ import gdown
 import os
 from sklearn.cluster import DBSCAN
 
-#Using 18 logical cores
-os.environ['LOKY_MAX_CPU_COUNT'] = '18'
-
 #Loading Data
 links = [
     "https://drive.google.com/file/d/1Yl4X_f_IifkV5OpWgylU_bI3i2Fmnazs/edit?usp=drive_link",
