@@ -7,9 +7,6 @@ from utilities import distance_interv_aed, distance_interv_amb
 from scipy.spatial import KDTree
 from geopy.distance import geodesic
 
-#Using 18 logical cores
-os.environ['LOKY_MAX_CPU_COUNT'] = '18'
-
 #Loading Data
 links = [
     "https://drive.google.com/file/d/1meuUUiUbCNDhhCvWTrs68gRgQ5qYQGcG/edit?usp=drive_link",
