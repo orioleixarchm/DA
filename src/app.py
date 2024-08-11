@@ -10,9 +10,6 @@ import os
 import gdown
 from utilities import add_marker, add_circle_marker, centered_metric
 
-#Using 18 logical cores
-os.environ['LOKY_MAX_CPU_COUNT'] = '18'
-
 #Loading Data
 # links = [
 #     "https://drive.google.com/file/d/1x4Ph_EfAo1994I4JVrGwPDmi0y-Vtt0q/edit?usp=drive_link",
