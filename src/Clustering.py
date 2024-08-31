@@ -37,7 +37,8 @@ intervention_rad = np.radians(interventions[['Longitude','Latitude']])
 Clustering_interv = DBSCAN(eps=0.000008 , min_samples=5, metric='haversine').fit(intervention_rad) #50 metres area
 labels = Clustering_interv.labels_ #Numbering clusters
 interventions['Cluster'] = labels 
-hotspots = interventions[interventions['Cluster'] != -1] #Removing noise (label = -1)
+hotspots = interventions
+#hotspots = interventions[interventions['Cluster'] != -1] #Removing noise (label = -1)
 
 #Display the hotspots
 print('Hotspot data frame:\n',hotspots.head())
