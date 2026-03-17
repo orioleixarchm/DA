@@ -1,19 +1,18 @@
 # Loading Packages
+import copy
 import json
-import matplotlib.cm as cm
+import re
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import streamlit as st
 import folium
-from folium import GeoJson
 import requests
 from io import BytesIO
-from utilities import add_marker, add_circle_marker, centered_metric
+from utilities import add_marker, centered_metric
 
 # ---------------------------------------------------------------------------
-# Data loading  (cached – runs once per session, not on every filter change)
+# Data loading — cached, runs once per session
 # ---------------------------------------------------------------------------
 
 @st.cache_data(show_spinner="Loading data…")
@@ -37,69 +36,123 @@ bluespots  = load_data(links[2])
 
 
 # ---------------------------------------------------------------------------
-# Base map  (cached – AED + ambulance markers never change)
-# ---------------------------------------------------------------------------
-
-@st.cache_data(show_spinner="Building base map…")
-def get_base_map_html():
-    """
-    Build the static layer (AED + ambulance markers) once and cache the HTML.
-    Returns the raw HTML string so we can inject the dynamic GeoJSON later
-    via a tiny <script> snippet.
-    """
-    brussels_coordinates = [50.8503, 4.3517]
-    m = folium.Map(location=brussels_coordinates, zoom_start=12)
-
-    for _, row in greenspots.iterrows():
-        add_marker(row, m, 'green', 'plus-sign', f"AED: {row['id']}")
-    for _, row in bluespots.iterrows():
-        add_marker(row, m, 'blue', 'plus-sign', f"Ambulance: {row['id']}")
-
-    return m._repr_html_()
-
-
-# ---------------------------------------------------------------------------
-# GeoJSON helper  (cached per unique filter combination)
+# Build a GeoJSON FeatureCollection for the hotspot subset
+# Cached per unique filter combination — instant on repeat calls
 # ---------------------------------------------------------------------------
 
 @st.cache_data(show_spinner=False)
-def build_geojson(subset_json: str) -> str:
-    """
-    Convert a JSON-serialised subset of hotspots into a GeoJSON FeatureCollection
-    string.  Results are cached, so repeated calls with identical data are free.
-    """
+def build_hotspot_geojson(subset_json: str) -> str:
     subset = pd.read_json(subset_json, dtype={'Postal Code': 'str'})
 
     if subset.empty:
         return json.dumps({"type": "FeatureCollection", "features": []})
 
-    # Assign a colour per event code
     subset = subset.copy()
     subset['_code_factor'] = pd.factorize(subset['Event Code'])[0]
     n = subset['_code_factor'].nunique()
     cmap = plt.get_cmap('Set1', n)
-    code_to_color = {
-        i: colors.rgb2hex(cmap(i % cmap.N)) for i in range(n)
-    }
+    code_to_color = {i: colors.rgb2hex(cmap(i % cmap.N)) for i in range(n)}
 
     features = []
     for _, row in subset.iterrows():
+        aed_dist = round(float(row['AED_distance']), 1) if pd.notna(row.get('AED_distance')) else "N/A"
+        amb_dist = round(float(row['Ambulance_distance']), 1) if pd.notna(row.get('Ambulance_distance')) else "N/A"
         features.append({
             "type": "Feature",
             "geometry": {
                 "type": "Point",
-                "coordinates": [row['Longitude'], row['Latitude']],
+                "coordinates": [float(row['Longitude']), float(row['Latitude'])],
             },
             "properties": {
                 "color":              code_to_color[row['_code_factor']],
                 "Event Code":         str(row['Event Code']),
-                "AED_distance":       round(float(row['AED_distance']), 1) if pd.notna(row.get('AED_distance')) else "N/A",
-                "Ambulance_distance": round(float(row['Ambulance_distance']), 1) if pd.notna(row.get('Ambulance_distance')) else "N/A",
+                "AED_distance":       aed_dist,
+                "Ambulance_distance": amb_dist,
                 "Dead":               str(row['Dead']),
             },
         })
 
     return json.dumps({"type": "FeatureCollection", "features": features})
+
+
+# ---------------------------------------------------------------------------
+# Base map HTML — AED + ambulance markers, cached once per session
+# ---------------------------------------------------------------------------
+
+@st.cache_data(show_spinner="Building base map…")
+def get_base_map_html() -> str:
+    m = folium.Map(location=[50.8503, 4.3517], zoom_start=12)
+    for _, row in greenspots.iterrows():
+        add_marker(row, m, 'green', 'plus-sign', f"AED: {row['id']}")
+    for _, row in bluespots.iterrows():
+        add_marker(row, m, 'blue', 'plus-sign', f"Ambulance: {row['id']}")
+    return m._repr_html_()
+
+
+def build_full_map_html(geojson_str: str) -> str:
+    base_html = get_base_map_html()
+
+    # Folium generates:  var map_XXXX = L.map(...)
+    # We need that variable name to call .addTo() on it from our injected script.
+    match = re.search(r'var\s+(map_[a-zA-Z0-9_]+)\s*=\s*L\.map\(', base_html)
+
+    if not match:
+        # Regex failed — safe fallback: rebuild everything the slow way
+        m = folium.Map(location=[50.8503, 4.3517], zoom_start=12)
+        for _, row in greenspots.iterrows():
+            add_marker(row, m, 'green', 'plus-sign', f"AED: {row['id']}")
+        for _, row in bluespots.iterrows():
+            add_marker(row, m, 'blue', 'plus-sign', f"Ambulance: {row['id']}")
+        geojson = json.loads(geojson_str)
+        for feature in geojson["features"]:
+            lon, lat = feature["geometry"]["coordinates"]
+            p = feature["properties"]
+            folium.CircleMarker(
+                location=[lat, lon], radius=5,
+                color=p["color"], fill=True, fill_color=p["color"],
+                popup=(f"Event: {p['Event Code']}<br>AED: {p['AED_distance']} m<br>"
+                       f"Ambulance: {p['Ambulance_distance']} m<br>Fatal: {p['Dead']}"),
+            ).add_to(m)
+        return m._repr_html_()
+
+    map_var = match.group(1)
+
+    # Inject a script that waits for Leaflet to finish initialising,
+    # then adds a GeoJSON layer with circle markers for the hotspots.
+    script = f"""
+<script>
+(function waitForMap() {{
+  if (typeof window["{map_var}"] === "undefined") {{
+    setTimeout(waitForMap, 50);
+    return;
+  }}
+  var _map = window["{map_var}"];
+  var geojson = {geojson_str};
+  L.geoJSON(geojson, {{
+    pointToLayer: function(feature, latlng) {{
+      return L.circleMarker(latlng, {{
+        radius: 5,
+        fillColor: feature.properties.color,
+        color:     feature.properties.color,
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.85
+      }});
+    }},
+    onEachFeature: function(feature, layer) {{
+      var p = feature.properties;
+      layer.bindPopup(
+        "<b>Event:</b> "         + p["Event Code"]         + "<br>" +
+        "<b>AED (m):</b> "       + p["AED_distance"]       + "<br>" +
+        "<b>Ambulance (m):</b> " + p["Ambulance_distance"] + "<br>" +
+        "<b>Fatal:</b> "         + p["Dead"]
+      );
+    }}
+  }}).addTo(_map);
+}})();
+</script>
+"""
+    return base_html.replace("</body>", script + "\n</body>")
 
 
 # ---------------------------------------------------------------------------
@@ -119,11 +172,11 @@ intervention_type = st.selectbox(
 )
 
 if intervention_type == 'Critical location':
-    aed_distance       = st.number_input('Set critical distance to AED (meters)',       min_value=0, value=500)
-    ambulance_distance = st.number_input('Set critical distance to Ambulance (meters)', min_value=0, value=3000)
+    aed_dist_thresh = st.number_input('Set critical distance to AED (meters)',       min_value=0, value=500)
+    amb_dist_thresh = st.number_input('Set critical distance to Ambulance (meters)', min_value=0, value=3000)
     interv_subset = hotspots.loc[
-        (hotspots['AED_distance'] > aed_distance) &
-        (hotspots['Ambulance_distance'] > ambulance_distance)
+        (hotspots['AED_distance'] > aed_dist_thresh) &
+        (hotspots['Ambulance_distance'] > amb_dist_thresh)
     ]
 elif intervention_type == 'Fatal':
     interv_subset = hotspots[hotspots['Dead'] == 'Yes']
@@ -144,10 +197,10 @@ if postal_code != 'All':
 
 # --- Metrics ----------------------------------------------------------------
 
-travel_time  = interv_subset['TravelTime_Destination_minutes'].mean()
-n_total      = interv_subset.shape[0]
-n_fatal      = interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]
-pct_fatal    = (n_fatal / n_total * 100) if n_total > 0 else 0.0
+n_total     = interv_subset.shape[0]
+n_fatal     = interv_subset[interv_subset['Dead'] == 'Yes'].shape[0]
+pct_fatal   = (n_fatal / n_total * 100) if n_total > 0 else 0.0
+travel_time = interv_subset['TravelTime_Destination_minutes'].mean()
 
 col1, col2 = st.columns(2)
 with col1:
@@ -158,62 +211,12 @@ with col2:
     centered_metric("Average arrival time:",      f"{round(travel_time, 2)} minutes")
 
 # --- Map --------------------------------------------------------------------
-# Strategy:
-#   1. Render the cached base map (static AED/ambulance markers).
-#   2. Inject a <script> that replaces the empty GeoJSON layer with the
-#      current filter's GeoJSON – no Python-side map rebuild required.
 
-base_html   = get_base_map_html()
-geojson_str = build_geojson(interv_subset.to_json(date_format='iso'))
-
-# Extract Folium's generated map variable name (e.g. "map_a3f2b1c4d5e6")
-import re
-map_var_match = re.search(r'var (map_[a-f0-9]+)\s*=\s*L\.map', base_html)
-map_var = map_var_match.group(1) if map_var_match else "map"
-
-inject_script = f"""
-<script>
-(function() {{
-  function injectLayer() {{
-    if (typeof {map_var} === 'undefined') {{
-      setTimeout(injectLayer, 100);
-      return;
-    }}
-    var geojson = {geojson_str};
-    L.geoJSON(geojson, {{
-      pointToLayer: function(feature, latlng) {{
-        return L.circleMarker(latlng, {{
-          radius: 5,
-          fillColor: feature.properties.color,
-          color:     feature.properties.color,
-          weight: 1,
-          fillOpacity: 0.8
-        }});
-      }},
-      onEachFeature: function(feature, layer) {{
-        var p = feature.properties;
-        layer.bindPopup(
-          "<b>Event:</b> "        + p["Event Code"]         + "<br>" +
-          "<b>AED dist (m):</b> " + p["AED_distance"]       + "<br>" +
-          "<b>Amb dist (m):</b> " + p["Ambulance_distance"] + "<br>" +
-          "<b>Fatal:</b> "        + p["Dead"]
-        );
-      }}
-    }}).addTo({map_var});
-  }}
-  if (document.readyState === 'complete') {{
-    injectLayer();
-  }} else {{
-    window.addEventListener('load', injectLayer);
-  }}
-}})();
-</script>
-"""
-
-full_html = base_html.replace("</body>", inject_script + "</body>")
+geojson_str = build_hotspot_geojson(interv_subset.to_json(date_format='iso'))
+map_html    = build_full_map_html(geojson_str)
 
 st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-st.components.v1.html(full_html, width=700, height=800)
+st.components.v1.html(map_html, width=700, height=800)
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Summary table ----------------------------------------------------------
