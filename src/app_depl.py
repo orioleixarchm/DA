@@ -55,25 +55,6 @@ def get_base_map_html():
     for _, row in bluespots.iterrows():
         add_marker(row, m, 'blue', 'plus-sign', f"Ambulance: {row['id']}")
  
-    # Add an empty GeoJSON layer that we will overwrite client-side.
-    # We give it a known variable name so the update script can find it.
-    folium.GeoJson(
-        data={"type": "FeatureCollection", "features": []},
-        name="hotspots",
-        style_function=lambda f: {
-            "radius": 5,
-            "fillColor": f["properties"].get("color", "#e41a1c"),
-            "color": f["properties"].get("color", "#e41a1c"),
-            "weight": 1,
-            "fillOpacity": 0.8,
-        },
-        marker=folium.CircleMarker(radius=5),
-        tooltip=folium.GeoJsonTooltip(
-            fields=["Event Code", "AED_distance", "Ambulance_distance", "Dead"],
-            aliases=["Event:", "AED dist (m):", "Ambulance dist (m):", "Fatal:"],
-        ),
-    ).add_to(m)
- 
     return m._repr_html_()
  
  
